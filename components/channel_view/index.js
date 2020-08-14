@@ -58,7 +58,7 @@ function mapStateToProps(state) {
         deactivatedChannel: channel ? getDeactivatedChannel(state, channel.id) : false,
         showTutorial: enableTutorial && tutorialStep <= TutorialSteps.INTRO_SCREENS,
         channelIsArchived: channel ? channel.delete_at !== 0 : false,
-        viewArchivedChannels,
+        viewArchivedChannels
     };
 }
 

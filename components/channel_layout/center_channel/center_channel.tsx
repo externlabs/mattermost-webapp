@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import PermalinkView from 'components/permalink_view';
 import ChannelHeaderMobile from 'components/channel_header_mobile';
 import ChannelIdentifierRouter from 'components/channel_layout/channel_identifier_router';
+import PrivateNotes from '../../../components/private_notes/index'
 
 type Props = {
     match: {

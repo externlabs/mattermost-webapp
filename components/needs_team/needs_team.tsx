@@ -20,6 +20,7 @@ import {makeAsyncComponent} from 'components/async_load';
 const LazyBackstageController = React.lazy(() => import('components/backstage'));
 import ChannelController from 'components/channel_layout/channel_controller';
 import Pluggable from 'plugins/pluggable';
+import PrivateNote from 'components/private_notes';
 
 const BackstageController = makeAsyncComponent(LazyBackstageController);
 
@@ -300,6 +301,10 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
                 <Route
                     path={'/:team/emoji'}
                     component={BackstageController}
+                />
+                <Route 
+                    path={'/:team/private-notes'}
+                    component={PrivateNote}
                 />
                 {this.props.plugins?.map((plugin: any) => (
                     <Route

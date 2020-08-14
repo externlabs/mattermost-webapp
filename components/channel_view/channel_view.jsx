@@ -14,7 +14,6 @@ import PostView from 'components/post_view';
 import TutorialView from 'components/tutorial';
 import {clearMarks, mark, measure, trackEvent} from 'actions/diagnostics_actions.jsx';
 import FormattedMarkdownMessage from 'components/formatted_markdown_message';
-
 export default class ChannelView extends React.PureComponent {
     static propTypes = {
         channelId: PropTypes.string.isRequired,
@@ -181,16 +180,17 @@ export default class ChannelView extends React.PureComponent {
                 ref='channelView'
                 id='app-content'
                 className='app__content'
-            >
-                <FileUploadOverlay overlayType='center'/>
+            >   
+
+                <FileUploadOverlay overlayType='center' />
                 <ChannelHeader
-                    channelId={this.props.channelId}
+                        channelId={this.props.channelId}
                 />
                 <DeferredPostView
-                    channelId={this.props.channelId}
-                    focusedPostId={this.state.focusedPostId}
+                channelId={this.props.channelId}
+                focusedPostId={this.state.focusedPostId}
                 />
-                {createPost}
+                {createPost} 
             </div>
         );
     }

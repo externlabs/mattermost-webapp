@@ -5,7 +5,6 @@ const axios = require('axios');
 
 module.exports = async ({baseUrl, user, method = 'get', path, data = {}}) => {
     const loginUrl = `${baseUrl}/api/v4/users/login`;
-
     // First we need to login with our external user to get cookies/tokens
     const loginResponse = await axios({
         url: loginUrl,

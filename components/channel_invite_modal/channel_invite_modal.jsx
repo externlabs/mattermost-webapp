@@ -45,7 +45,6 @@ export default class ChannelInviteModal extends React.PureComponent {
             searchProfiles: PropTypes.func.isRequired,
         }).isRequired,
     };
-
     static defaultProps = {
         includeUsers: {},
         excludeUsers: {},

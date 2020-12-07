@@ -14,7 +14,11 @@ class PrivateNote extends PureComponent {
             title: '',
             currentNotes: [],
             currentItem: -1,
-            result: []
+            result: [],
+            flag: true,
+            currentIndexID: '',
+            currentIndexTitle: '',
+            totalNotes: 0
         }
     }
     input = (event) => {
@@ -38,7 +42,6 @@ class PrivateNote extends PureComponent {
     }
 
     getAlldata = () => {
-        alert('data')
         const url = new URL('http://localhost:8065/api/v4/notes');
         fetch(url, {
             method: 'GET',
@@ -48,15 +51,16 @@ class PrivateNote extends PureComponent {
 
         }).then((response) => response.json())
             .then((result) => {
-                this.setState({ responsedata: result })
-                this.state.responsedata.map((i, index) => { console.log(this.state.responsedata[index].body) })
+                this.setState({
+                    responsedata: result,
+                    totalNotes: result.length
+                })
             })
             .catch((err) => { console.log('error', err) })
     }
 
     setdata = async () => {
         const url = 'http://localhost:8065/api/v4/notes';
-        // console.log(document.cookie);
         let response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -71,11 +75,10 @@ class PrivateNote extends PureComponent {
         })
 
         let result = await response.json()
-        console.log('result', result);
         this.setState({
             currentNotes: this.state.currentNotes.concat(result)
         })
-        console.log('currentNotes', this.state.currentNotes)
+        this.getAlldata();
     }
 
     getDataById = (index) => {
@@ -83,7 +86,6 @@ class PrivateNote extends PureComponent {
         const id = this.state.responsedata[index].id;
 
         const url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
-        console.log('id url----',url)
         fetch(url, {
             method: 'GET',
             headers: {
@@ -93,26 +95,61 @@ class PrivateNote extends PureComponent {
         }).then((response) => response.json())
             .then((result) => {
                 this.setState({ result })
-                console.log('called')
             })
             .catch((err) => { console.log('error', err) })
     }
 
     delete = (index) => {
-        alert(index+'nitu')
-        // // this.setState({currentItem:index})
         const id = this.state.responsedata[index].id;
-        console.log('url----', id)
         let url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
-        console.log('url----', url)
         fetch(url, {
             method: 'DELETE',
             headers: {
+                accept: '*/*',
+                'Content-Type': 'text/plain;charset=utf-8',
+                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
                 Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
             },
-
-        }).then((response) => { console.log('delete-', response) })
+        })
+            .then((response) => {
+                this.getAlldata();
+            })
             .catch((err) => { console.log('error--', err) })
+    }
+
+    put(index) {
+        this.setState({
+            flag: false,
+            currentIndexID: this.state.responsedata[index].id,
+            title: this.state.responsedata[index].name,
+        })
+        this.inputRef.focus();
+    }
+
+    updateNotes = (id, title) => {
+        this.setState({ flag: true })
+
+        let url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
+        fetch(url, {
+            method: 'PUT',
+            headers: {
+                accept: '*/*',
+                'Content-Type': 'text/plain;charset=utf-8',
+                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
+                Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+            },
+            body: JSON.stringify({
+                name: this.state.title,
+                body: this.state.text,
+            })
+        }).then((response) => {
+            this.setState({ title: '', text: '' })
+            this.getAlldata();
+        })
+            .catch((err) => {
+                console.log(err)
+            })
+
     }
     render() {
         return (
@@ -128,34 +165,43 @@ class PrivateNote extends PureComponent {
                         <div className='right-container' >
 
                             <div className='note-text' >Private Notes</div>
-                            <Scrollbars style={{ height: '94%' }} >
+                            <Scrollbars style={{ height: '94%' }} autoHide={true}>
                                 <div className='note-content' >
                                     {this.state.responsedata.map((value, index) => (
                                         <div key={index} >
                                             <div>
                                                 <div style={{ float: 'right', padding: '5px' }}>
-                                                    <span><i class="fa fa-pencil" aria-hidden="true" style={{ fontSize: '20px', marginRight: '8px' }}></i></span>
-                                                    <span onClick={() => this.delete(index)} ><i class="fa fa-times" aria-hidden="true" style={{ color: 'red', opacity: 0.7, fontSize: '22px', cursor: 'pointer' }}></i></span>
+                                                    <span onClick={() => { this.put(index) }} ><i class="fa fa-pencil" aria-hidden="true" style={{ fontSize: '15px', marginRight: '8px', cursor: 'pointer' }} ></i></span>
+                                                    <span onClick={() => this.delete(index)} ><i class="fa fa-times" aria-hidden="true" style={{ color: 'red', opacity: 0.7, fontSize: '18px', cursor: 'pointer' }} ></i></span>
                                                 </div>
                                             </div>
-                                            <h3><b>{value.name}</b></h3>
-                                            <div onClick={() => this.getDataById(index)} style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>{value.body}</div>
+                                            <h4><b>{value.name}</b></h4>
+                                            <div onClick={() => this.getDataById(index)} style={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', color: '#737373' }}>{value.body}</div>
                                         </div>
-                                    ))}
+                                    ))
+                                    }
 
                                 </div>
                             </Scrollbars>
 
                         </div>
                         <div className='left-container' >
-                            <div className='private-note-header' />
+                            <div className='private-note-header' >
+                                <div className='book-icon'>
+                                    <i class="fa fa-book" aria-hidden="true" style={{ color: '#7a8083', fontSize: '18px', }} ></i>
+                                    <p onClick={() => this.getDataById(0)}>My Notes</p>
+                                </div>
+                                <button><i class="fa fa-plus" aria-hidden="true" style={{ color: 'white', fontSize: '12px', marginRight: '10px' }} ></i>New Note</button>
+                            </div>
                             <div className='note-input-data'>
                                 {this.state.currentItem >= 0 ? this.state.responsedata[this.state.currentItem].body : ''}
                             </div>
                             <div className='input-box'>
-                                <input type='text' placeholder={'Note Title'} value={this.state.title} onChange={this.handleTitle} />
-                                <input type='text' placeholder={'Note Body'} value={this.state.text} onChange={this.input} />
-                                <button onClick={this.show} >Add Notes</button>
+                                <div>
+                                    <input type='text' className='note-title' placeholder={'Title'} value={this.state.title} onChange={this.handleTitle} />
+                                    <input type='text' className='note-body' placeholder={'Start writing'} value={this.state.text} onChange={this.input} ref={ref => { this.inputRef = ref; }} />
+                                </div>
+                                <button onClick={this.state.flag ? this.show : () => this.updateNotes(this.state.currentIndexID, this.state.cureentIndexTitle)} >Add Notes</button>
                             </div>
                         </div>
                     </div>

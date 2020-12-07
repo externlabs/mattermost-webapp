@@ -185,8 +185,6 @@ class LegacySidebar extends React.PureComponent {
         this.scrollAnimation = this.animate.createSpring();
         this.scrollAnimation.setOvershootClampingEnabled(true); // disables the spring action at the end of animation
         this.scrollAnimation.addListener({ onSpringUpdate: this.handleScrollAnimationUpdate });
-    console.log('mattermist',props);   
-    console.log(this.props.orderedChannelIds.length); 
     }
     static getDerivedStateFromProps(nextProps, prevState) {
         if (nextProps.orderedChannelIds[0].type === SidebarChannelGroups.UNREADS &&
@@ -632,6 +630,21 @@ class LegacySidebar extends React.PureComponent {
                         </ul>
                         : null
                     }
+                     <ul className='nav nav-pills nav-stacked a11y__section list-style'>
+                          <NavLink to='/externlabs/calendar'>
+                              <li class="sidebar-section__header">
+                                  <span className="private-notes" >Calendar</span>
+  
+                                      <button
+                                          id='createPublicChannel'
+                                          type='button'
+                                          className='add-channel-btn cursor--pointer style--none'
+                                      ><span>{'+'}</span>
+                                      </button>
+                              </li>
+                          </NavLink>
+  
+                    </ul>
                 </div>
             </Scrollbars>
         );

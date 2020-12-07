@@ -21,7 +21,7 @@ const LazyBackstageController = React.lazy(() => import('components/backstage'))
 import ChannelController from 'components/channel_layout/channel_controller';
 import Pluggable from 'plugins/pluggable';
 import PrivateNote from 'components/private_notes';
-
+import Calendar from 'components/calendar'
 const BackstageController = makeAsyncComponent(LazyBackstageController);
 
 let wakeUpInterval: number;
@@ -305,6 +305,10 @@ export default class NeedsTeam extends React.PureComponent<Props, State> {
                 <Route 
                     path={'/:team/private-notes'}
                     component={PrivateNote}
+                />
+                <Route
+                    path={'/:team/calendar'}
+                    component={Calendar}
                 />
                 {this.props.plugins?.map((plugin: any) => (
                     <Route

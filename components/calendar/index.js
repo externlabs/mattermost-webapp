@@ -77,7 +77,7 @@ class Calendar extends PureComponent {
     let month = new Date().getMonth() + 1;
     this.daysInMonth(year, month);
     this.getAllEvents();
-    const url = new URL('/api/v4/users?page=0&per_page=1000');
+    const url = new URL('http://localhost:8065/api/v4/users?page=0&per_page=1000');
     var user_id = this.getCookie('MMUSERID');
     fetch(url, {
       method: 'GET',
@@ -124,7 +124,7 @@ class Calendar extends PureComponent {
   }
 
   getAllEvents = () => {
-    const url = new URL('/api/v4/events');
+    const url = new URL('http://localhost:8065/api/v4/events');
     fetch(url, {
       method: 'GET',
       headers: {
@@ -143,7 +143,7 @@ class Calendar extends PureComponent {
   }
 
   postEvent = async () => {
-    const url = '/api/v4/events';
+    const url = 'http://localhost:8065/api/v4/events';
     this.setState({ showModal: !this.state.showModal });
     let response = await fetch(url, {
       method: 'POST',
@@ -376,7 +376,7 @@ class Calendar extends PureComponent {
   };
 
   deleteEvent = (id) => {
-    let url = new URL(`/api/v4/events/${id}`);
+    let url = new URL(`http://localhost:8065/api/v4/events/${id}`);
     fetch(url, {
       method: 'DELETE',
       headers: {
@@ -394,8 +394,8 @@ class Calendar extends PureComponent {
 
   updateEvent = (id) => {
     this.setState({ eventflag: false })
-    this.setState({ showModal: !this.state.showModal });
-    let url = new URL(`/api/v4/events/${id}`);
+    
+    let url = new URL(`http://localhost:8065/api/v4/events/${id}`);
     fetch(url, {
       method: 'PUT',
       headers: {

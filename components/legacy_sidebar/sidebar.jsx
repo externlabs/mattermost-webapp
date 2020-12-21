@@ -614,10 +614,9 @@ class LegacySidebar extends React.PureComponent {
                     {
                         this.props.orderedChannelIds.length  ?
                         <ul className='nav nav-pills nav-stacked a11y__section list-style'>
-                        <NavLink to='/externlabs/private-notes'>
+                        <NavLink to={`/${this.props.currentTeam.name}/private-notes`}>
                             <li class="sidebar-section__header">
                                 <span className="private-notes" >PRIVATE NOTES</span>
-
                                     <button
                                         id='createPublicChannel'
                                         type='button'
@@ -631,7 +630,7 @@ class LegacySidebar extends React.PureComponent {
                         : null
                     }
                      <ul className='nav nav-pills nav-stacked a11y__section list-style'>
-                          <NavLink to='/externlabs/calendar'>
+                          <NavLink to={`/${this.props.currentTeam.name}/calendar`}>
                               <li class="sidebar-section__header">
                                   <span className="private-notes" >Calendar</span>
   

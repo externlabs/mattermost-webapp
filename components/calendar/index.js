@@ -70,19 +70,20 @@ class Calendar extends PureComponent {
     return await Promise.resolve(requests);
   } 
   componentDidMount() {
+    console.log("document.cookie 5bmr4743ytdqjpuq5d3at41qhc document.cookie",document.cookie.split(" "));
     console.log('Hello', t('login_mfa.token'))
     console.log(this.fetchUser())
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
     this.daysInMonth(year, month);
     this.getAllEvents();
-    this.getAllReminders()
     const url = new URL('http://localhost:8065/api/v4/users?page=0&per_page=1000');
     var user_id = this.getCookie('MMUSERID');
     fetch(url, {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + 'di46ko6nt7n6zkcpnimix37f6a',
+        // Authorization: 'Bearer ' + 'di46ko6nt7n6zkcpnimix37f6a',
+        Authorization: 'Bearer ' + 'di46ko6nt7n6zkcpn',
       },
 
     }).then((response) => response.json())
@@ -132,35 +133,18 @@ class Calendar extends PureComponent {
 
     }).then((response) => response.json())
       .then((result) => {
-        // console.log('result---',result)
         this.setState({
           responsedata: result,
         })
-      })
-      .catch((err) => { console.log('error', err) })
-  }
+        console.log('getEvent', this.state.responsedata)
 
-  getAllReminders = () => {
-
-    const url = new URL('http://localhost:8065/api/v4/reminders');
-    fetch(url, {
-      method: 'GET',
-      headers: {
-        Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
-      },
-
-    }).then((response) => response.json())
-      .then((result) => {
-        this.setState({
-          reminders: result,
-        })
       })
       .catch((err) => { console.log('error', err) })
   }
 
   postEvent = async () => {
     const url = 'http://localhost:8065/api/v4/events';
-    
+    this.setState({ showModal: !this.state.showModal });
     let response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -236,7 +220,7 @@ class Calendar extends PureComponent {
     this.isModal = true;
     this.shareflag = true;
     this.setState({
-       showModal: true,
+       showEventModal: true,
        current_event: id
      })
   }
@@ -410,7 +394,7 @@ class Calendar extends PureComponent {
 
   updateEvent = (id) => {
     this.setState({ eventflag: false })
-
+    this.setState({ showModal: !this.state.showModal });
     let url = new URL(`http://localhost:8065/api/v4/events/${id}`);
     fetch(url, {
       method: 'PUT',
@@ -523,7 +507,7 @@ class Calendar extends PureComponent {
     let result = await response.json()
     if(result.create_at){
       this.setState({
-        showModal: false
+        showEventModal: false
       })
     }
     // const {actions, channel} = this.props;
@@ -569,7 +553,7 @@ class Calendar extends PureComponent {
   }
 
   onHide = () => {
-    this.setState({showModal: false});
+    this.setState({showEventModal: false});
     this.setUsersLoadingState(false);
   };
 
@@ -738,13 +722,13 @@ class Calendar extends PureComponent {
                   <span id='close' class="close" onClick={() => { this.setState({ showModal: false }) }} >&times;</span>
                     <div className='modal-sub-content'>
                     <input className='title-input-field' value={this.state.title} onChange={this.inputTitle} placeholder='Add title' />
-                    <div className='modal-button'>
+                    {/* <div className='modal-button'>
                       <button onClick={eventflag ? () => this.updateEvent(eventID) : this.postEvent}>Event</button>
-                    </div>
+                    </div> */}
                     <div className='modal-sub-content-values'>
                       <input type='date' value={this.state.showdate} className='date' onChange={this.inputDate} />
                       <input type='text' value={this.state.description} onChange={this.inputDescription} placeholder='Add description' className='description' />
-                      <button style={{ position: 'initial', padding: '10px 20px' }}>Save</button>
+                      <button style={{ position: 'initial', padding: '10px 20px' }} onClick={eventflag ? () => this.updateEvent(eventID) : this.postEvent}>Add Event</button>
                     </div>
                   </div>
                </div>
@@ -775,7 +759,7 @@ class Calendar extends PureComponent {
         <Modal
           id='addUsersToChannelModal'
           dialogClassName='a11y__modal more-modal'
-          show={this.state.showModal}
+          show={this.state.showEventModal}
           onHide={this.onHide}
           // onExited={this.props.onHide}
           role='dialog'

@@ -201,7 +201,7 @@ class PrivateNote extends PureComponent {
                                     <input type='text' className='note-title' placeholder={'Title'} value={this.state.title} onChange={this.handleTitle} />
                                     <input type='text' className='note-body' placeholder={'Start writing'} value={this.state.text} onChange={this.input} ref={ref => { this.inputRef = ref; }} />
                                 </div>
-                                <button onClick={this.state.flag ? this.show : () => this.updateNotes(this.state.currentIndexID, this.state.cureentIndexTitle)} >Add Notes</button>
+                                <button style={{ color: 'white', fontSize: '12px', marginRight: '10px', border: 0, padding: '14px 30px', borderRadius: 3 }} onClick={this.state.flag ? this.show : () => this.updateNotes(this.state.currentIndexID, this.state.cureentIndexTitle)} >Add Notes</button>
                             </div>
                         </div>
                     </div>

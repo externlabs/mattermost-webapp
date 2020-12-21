@@ -77,7 +77,7 @@ class Calendar extends PureComponent {
     let month = new Date().getMonth() + 1;
     this.daysInMonth(year, month);
     this.getAllEvents();
-    const url = new URL('/api/v4/users?page=0&per_page=1000');
+    const url = '/api/v4/users?page=0&per_page=1000';
     var user_id = this.getCookie('MMUSERID');
     fetch(url, {
       method: 'GET',
@@ -124,7 +124,7 @@ class Calendar extends PureComponent {
   }
 
   getAllEvents = () => {
-    const url = new URL('/api/v4/events');
+    const url = '/api/v4/events';
     fetch(url, {
       method: 'GET',
       headers: {

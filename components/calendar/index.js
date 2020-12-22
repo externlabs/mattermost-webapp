@@ -132,7 +132,7 @@ class Calendar extends PureComponent {
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
-        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1]
+        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0]
       },
       body: JSON.stringify({
         date: (`${this.state.setdate}`),
@@ -360,7 +360,7 @@ class Calendar extends PureComponent {
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
-        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
+        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0],
         // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
       },
 
@@ -379,7 +379,7 @@ class Calendar extends PureComponent {
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
-        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
+        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0],
         // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
       },
       body: JSON.stringify({
@@ -472,7 +472,7 @@ class Calendar extends PureComponent {
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
-        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1]
+        "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0]
       },
       body: JSON.stringify({
         user_Id: user_Id,

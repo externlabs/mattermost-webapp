@@ -47,11 +47,7 @@ class PrivateNote extends PureComponent {
         })
         const url = '/api/v4/notes';
         fetch(url, {
-            method: 'GET',
-            // headers: {
-            //     Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
-            // },
-
+            method: 'GET'
         }).then((response) => response.json())
             .then((result) => {
                 this.setState({
@@ -69,7 +65,7 @@ class PrivateNote extends PureComponent {
             headers: {
                 accept: '*/*',
                 'Content-Type': 'text/plain;charset=utf-8',
-                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1]
+                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0]
             },
             body: JSON.stringify({
                 body: this.state.text,
@@ -110,7 +106,7 @@ class PrivateNote extends PureComponent {
             headers: {
                 accept: '*/*',
                 'Content-Type': 'text/plain;charset=utf-8',
-                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
+                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0],
                 // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
             },
         })
@@ -139,7 +135,7 @@ class PrivateNote extends PureComponent {
             headers: {
                 accept: '*/*',
                 'Content-Type': 'text/plain;charset=utf-8',
-                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
+                "X-CSRF-Token": document.cookie.split("MMCSRF=")[1].split(";")[0],
                 // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
             },
             body: JSON.stringify({

@@ -32,9 +32,9 @@ class Calendar extends PureComponent {
       eventdate: 0,
       allEvents: [],
       setdate: 0,
-      showdate: 0,
-      title: null,
-      description: null,
+      showdate: "",
+      title: "",
+      description: "",
       // for_month: false,
       // for_year: false,
       deleteEvent: null,
@@ -185,13 +185,33 @@ class Calendar extends PureComponent {
   }
 
   openModel = (id = 0, date = 0, flag = 0) => {
-    this.isModal = false
-    this.setState({
-      showModal: true,
-      eventflag: flag,
-      eventID: id,
-      deleteflag: flag
-    });
+    this.isModal = false;
+    if(typeof id == typeof "string"){
+
+      const obj = this.state.responsedata.filter(item => {
+        return item.id === id;
+      })
+      const d = obj[0].date.substr(0,2);
+      const m = obj[0].date.substr(2,2);
+      const y = obj[0].date.substr(4,4);
+      this.setState({
+        showModal: true,
+        eventflag: flag,
+        eventID: id,
+        deleteflag: flag,
+        title: obj[0].title,
+        description: obj[0].description,
+        showdate: y+"-"+m+"-"+d
+      });
+    } else {
+      this.setState({
+        showModal: true,
+        eventflag: flag,
+        eventID: id,
+        deleteflag: flag,
+      });
+    }
+
   }
 
   shareEvent = (id) => {
@@ -533,6 +553,15 @@ class Calendar extends PureComponent {
     this.setUsersLoadingState(false);
   };
 
+  closeEvent = () => { 
+    this.setState({ 
+      showModal: false,
+      title: "",
+      description: "",
+      showdate: ""
+    }) 
+  }
+
   render() {
     const {shareModal, date, Month, current_month, current_year, Year, NumberOfDays, reminders, index, showModal, eventflag, selectedvalue, eventID, deleteflag } = this.state;
     let day = date.getDate();
@@ -545,7 +574,7 @@ class Calendar extends PureComponent {
       let commonEvent = []
       this.addEventDate = [...this.addEventDate];
       for (let i = 0; i < c; i++) {
-        list.push(<li></li>);
+        list.push(<li key={i+"s"}></li>);
       }
 
       for (let j = 1; j <= NumberOfDays; j++) {
@@ -571,7 +600,7 @@ class Calendar extends PureComponent {
             if (this.addEventDate[i].onlydate == j && flag) {
               if (this.addEventDate[i] != 0) {
                 list.push(
-                  <li id={listId++} className={day == j && c == 0 ? 'current-date event' : 'event'} >
+                  <li  id={listId++} className={day == j && c == 0 ? 'current-date event' : 'event'} >
                     {
                       this.addEventDate[i].onlydate == j ?
                         <div>
@@ -579,7 +608,7 @@ class Calendar extends PureComponent {
                             <h2>{j}</h2>
                             {
                               c == 0 ? <div className='inline-event_'>
-                                <span onClick={() => this.shareEvent(this.addEventDate[i].id)} className='_fa_share'><i class="fa fa-share" aria-hidden="true"></i></span>
+                                <span onClick={() => this.shareEvent(this.addEventDate[i].id)} className='_fa_share'><i className="fa fa-share" aria-hidden="true"></i></span>
                                 <span onClick={() => this.openModel(this.addEventDate[i].id, this.addEventDate[i].onlydate, 1)} ><i className="fa fa-pencil" aria-hidden="true" ></i></span>
                                 <span onClick={c == 0 ? () => this.confirm(this.addEventDate[i].id) : null} className="fa fa-times" style={{marginTop: 3}}></span>
                               </div> : null
@@ -593,13 +622,13 @@ class Calendar extends PureComponent {
                             <span id='close-event-modal' onClick={this.close} >&times;</span>
                             <div className='_tooltip'>
                               {
-                                commonEvent.map((e) =>
-                                  <div className='more-event-data' >
+                                commonEvent.map((e, i) =>
+                                  <div className='more-event-data' key={i} >
                                     <div className='sub-event-data'>
                                       <span onClick={() => this.shareEvent(e.id)} className='share'>
-                                        <i class="fa fa-share" aria-hidden="true"></i>
+                                        <i className="fa fa-share" aria-hidden="true"></i>
                                       </span>
-                                      <span onClick={() => this.openModel(e.id, e.date, 1)} ><i class="fa fa-pencil" aria-hidden="true" ></i></span>
+                                      <span onClick={() => this.openModel(e.id, e.date, 1)} ><i className="fa fa-pencil" aria-hidden="true" ></i></span>
                                       <span className="delete-event-button" onClick={() => this.confirm(e.id)}>&times;</span>
                                     </div>
                                     <p className='more-event-data-title' >{(counter++) + "  " + e.title}</p>
@@ -655,7 +684,6 @@ class Calendar extends PureComponent {
           placeholderText= "Search and Share Event"
       />
   );
-
     return (
       <>
         <Scrollbars>
@@ -671,33 +699,34 @@ class Calendar extends PureComponent {
             </form> */}
             <div className='inline-container'>
               <span>
-                <i class="fa fa-angle-left" style={{ fontSize: '35px', color: '#bababa' }} onClick={this._prevMonth}></i>
+                <i className="fa fa-angle-left" style={{ fontSize: '35px', color: '#bababa' }} onClick={this._prevMonth}></i>
               </span>
               <span>
-                <i class="fa fa-angle-right" style={{ fontSize: '35px', color: '#bababa' }} onClick={this._nextMonth}></i>
+                <i className="fa fa-angle-right" style={{ fontSize: '35px', color: '#bababa' }} onClick={this._nextMonth}></i>
               </span>
               {/* <span className='day'>Today</span> */}
               <select id='select' className='select-year' onChange={this._getMonth}>
                 <option >{Month[this.state.current_month - 1]}</option>
                 {
-                  Month.map((i, index) => <option value={index + 1}>{i}</option>)
+                  Month.map((i, index) => <option key={index} value={index + 1}>{i}</option>)
                 }
               </select>
               <select onChange={this.getYear} value={this.state.current_year} id='select' className='select-year'>
                 <option>{this.state.current_year}</option>
                 {
-                  Year.map((i, index) => <option value={i}>{i}</option>)
+                  Year.map((i, index) => <option key={index} value={i}>{i}</option>)
                 }
               </select>
               <button id='modal-btn' onClick={this.openModel}>
-                <span><i class="fa fa-plus" /></span>
+                <span><i className="fa fa-plus" /></span>
                 <span>Create</span>
               </button>
               <div className={showModal ? 'event-modal' : 'hide-event-modal'}  >
-                <div class="_modal-content">
-                  <span id='close' class="close" onClick={() => { this.setState({ showModal: false }) }} >&times;</span>
+                <div className="_modal-content">
+                  <span id='close' className="close" 
+                    onClick={this.closeEvent} >&times;</span>
                     <div className='modal-sub-content'>
-                    <input className='title-input-field' value={this.state.title} onChange={this.inputTitle} placeholder='Add title' />
+                    <input className='title-input-field' type="text" value={this.state.title} onChange={this.inputTitle} placeholder='Add title' />
                     {/* <div className='modal-button'>
                       <button onClick={eventflag ? () => this.updateEvent(eventID) : this.postEvent}>Event</button>
                     </div> */}

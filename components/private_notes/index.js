@@ -171,8 +171,8 @@ class PrivateNote extends PureComponent {
                                         <div key={index} >
                                             <div>
                                                 <div style={{ float: 'right', padding: '5px' }}>
-                                                    <span onClick={() => { this.put(index) }} ><i class="fa fa-pencil" aria-hidden="true" style={{ fontSize: '15px', marginRight: '8px', cursor: 'pointer' }} ></i></span>
-                                                    <span onClick={() => this.delete(index)} ><i class="fa fa-times" aria-hidden="true" style={{ color: 'red', opacity: 0.7, fontSize: '18px', cursor: 'pointer' }} ></i></span>
+                                                    <span onClick={() => { this.put(index) }} ><i className="fa fa-pencil" aria-hidden="true" style={{ fontSize: '15px', marginRight: '8px', cursor: 'pointer' }} ></i></span>
+                                                    <span onClick={() => this.delete(index)} ><i className="fa fa-times" aria-hidden="true" style={{ color: 'red', opacity: 0.7, fontSize: '18px', cursor: 'pointer' }} ></i></span>
                                                 </div>
                                             </div>
                                             <h4><b>{value.name}</b></h4>
@@ -188,10 +188,10 @@ class PrivateNote extends PureComponent {
                         <div className='left-container' >
                             <div className='private-note-header' >
                                 <div className='book-icon'>
-                                    <i class="fa fa-book" aria-hidden="true" style={{ color: '#7a8083', fontSize: '18px', }} ></i>
+                                    <i className="fa fa-book" aria-hidden="true" style={{ color: '#7a8083', fontSize: '18px', }} ></i>
                                     <p onClick={() => this.getDataById(0)}>My Notes</p>
                                 </div>
-                                <button><i class="fa fa-plus" aria-hidden="true" style={{ color: 'white', fontSize: '12px', marginRight: '10px' }} ></i>New Note</button>
+                                <button><i className="fa fa-plus" aria-hidden="true" style={{ color: 'white', fontSize: '12px', marginRight: '10px' }} ></i>New Note</button>
                             </div>
                             <div className='note-input-data'>
                                 {this.state.currentItem >= 0 ? this.state.responsedata[this.state.currentItem].body : ''}

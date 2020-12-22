@@ -3,21 +3,16 @@ import {connect } from 'react-redux';
 import 'components/calendar/calendar.scss';
 import LegacySidebar from 'components/legacy_sidebar';
 import Scrollbars from 'react-custom-scrollbars';
-import ChannelInviteModal from 'components/channel_invite_modal';
-import TextBox from 'components/textbox/textbox';
 import MultiSelect from 'components/multiselect/multiselect';
 import {Modal} from 'react-bootstrap';
 import ProfilePicture from 'components/profile_picture';
 import GuestBadge from 'components/widgets/badges/guest_badge';
 import BotBadge from 'components/widgets/badges/bot_badge';
 import {Client4} from 'mattermost-redux/client';
-import {displayEntireNameForUser, localizeMessage, isGuest} from 'utils/utils.jsx';
+import {displayEntireNameForUser, isGuest} from 'utils/utils.jsx';
 import AddIcon from 'components/widgets/icons/fa_add_icon';
 import Constants from 'utils/constants';
-import {loadProfilesAndReloadTeamMembers, loadProfilesWithoutTeam } from '../../actions/user_actions';
-import { stat } from 'fs';
 import { getNonBotUsers } from '../../components/admin_console/system_users/list/selectors';
-import {t} from 'utils/i18n.jsx';
 
 const USERS_PER_PAGE = 20;
 const MAX_SELECTABLE_VALUES = 10;
@@ -65,14 +60,10 @@ class Calendar extends PureComponent {
   }
 
   fetchUser = async () => {
-    console.log(Client4)
     const requests = Client4.getToken();
     return await Promise.resolve(requests);
   } 
   componentDidMount() {
-    console.log("document.cookie 5bmr4743ytdqjpuq5d3at41qhc document.cookie",document.cookie.split(" "));
-    console.log('Hello', t('login_mfa.token'))
-    console.log(this.fetchUser())
     let year = new Date().getFullYear();
     let month = new Date().getMonth() + 1;
     this.daysInMonth(year, month);
@@ -80,15 +71,9 @@ class Calendar extends PureComponent {
     const url = '/api/v4/users?page=0&per_page=1000';
     var user_id = this.getCookie('MMUSERID');
     fetch(url, {
-      method: 'GET',
-      headers: {
-        // Authorization: 'Bearer ' + 'di46ko6nt7n6zkcpnimix37f6a',
-        Authorization: 'Bearer ' + 'di46ko6nt7n6zkcpn',
-      },
-
+      method: 'GET'
     }).then((response) => response.json())
       .then((result) => {
-        console.log('result---',result)
         this.setState({
           users: result.filter(item=> item.id != user_id)
         })
@@ -109,7 +94,6 @@ class Calendar extends PureComponent {
   getCookie = (cname) => {
     var name = cname + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
-    console.log('decodedCookie', decodedCookie)
     var ca = decodedCookie.split(';');
     for(var i = 0; i <ca.length; i++) {
       var c = ca[i];
@@ -128,7 +112,7 @@ class Calendar extends PureComponent {
     fetch(url, {
       method: 'GET',
       headers: {
-        Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+        // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
       },
 
     }).then((response) => response.json())
@@ -136,8 +120,6 @@ class Calendar extends PureComponent {
         this.setState({
           responsedata: result,
         })
-        console.log('getEvent', this.state.responsedata)
-
       })
       .catch((err) => { console.log('error', err) })
   }
@@ -172,7 +154,6 @@ class Calendar extends PureComponent {
     this.setState({
       title: event.target.value
     })
-    console.log(this.state.title)
   }
 
   inputDate = (event) => {
@@ -186,7 +167,6 @@ class Calendar extends PureComponent {
       setdate: parseInt(c)
 
     })
-    console.log(this.state.setdate)
 
   }
 
@@ -194,7 +174,6 @@ class Calendar extends PureComponent {
     this.setState({
       description: event.target.value
     })
-    console.log(this.state.description)
 
   }
 
@@ -212,7 +191,7 @@ class Calendar extends PureComponent {
       eventflag: flag,
       eventID: id,
       deleteflag: flag
-    }, () => { console.log(this.state.eventflag) })
+    });
   }
 
   shareEvent = (id) => {
@@ -226,7 +205,6 @@ class Calendar extends PureComponent {
   }
 
   _getMonth = (event) => {
-    console.log('event', event.target.value);
     this.setState({
       current_month: event.target.value,
       // for_month: true
@@ -313,7 +291,7 @@ class Calendar extends PureComponent {
     this.setState({
       _tooltip: true,
       index: event.target.id,
-    }, () => { console.log('dfty', this.state._tooltip) })
+    })
   }
 
   close = () => {
@@ -376,33 +354,33 @@ class Calendar extends PureComponent {
   };
 
   deleteEvent = (id) => {
-    let url = new URL(`/api/v4/events/${id}`);
+    let url = `/api/v4/events/${id}`;
     fetch(url, {
       method: 'DELETE',
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
         "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
-        Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+        // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
       },
 
     }).then((response) => {
       this.getAllEvents();
     })
-      .catch((err) => { console.log('error--', err) })
+    .catch((err) => { console.log('error--', err) })
   }
 
   updateEvent = (id) => {
     this.setState({ eventflag: false })
     
-    let url = new URL(`/api/v4/events/${id}`);
+    let url = `/api/v4/events/${id}`;
     fetch(url, {
       method: 'PUT',
       headers: {
         accept: '*/*',
         'Content-Type': 'text/plain;charset=utf-8',
         "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
-        Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+        // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
       },
       body: JSON.stringify({
         title: this.state.title,
@@ -439,7 +417,6 @@ class Calendar extends PureComponent {
             "",//this.props.channel.id, 
             "",//this.props.channel.group_constrained, 
             page + 1, USERS_PER_PAGE).then((response) => {
-              console.log('response', response);
               this.setUsersLoadingState(false);
           });
       }
@@ -476,7 +453,6 @@ class Calendar extends PureComponent {
   };
 
   addValue = (value) => {
-    console.log('Values', value)
       const values = Object.assign([], this.state.values);
       if (values.indexOf(value) === -1) {
           values.push(value);

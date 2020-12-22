@@ -1,9 +1,8 @@
-import React, { Component, PureComponent } from 'react';
+import React, {  PureComponent } from 'react';
 import 'components/private_notes/privatenotes.scss';
 
 import LegacySidebar from 'components/legacy_sidebar'
 import Scrollbars from 'react-custom-scrollbars';
-import { $CombinedState } from 'redux';
 class PrivateNote extends PureComponent {
     constructor() {
         super();
@@ -42,12 +41,16 @@ class PrivateNote extends PureComponent {
     }
 
     getAlldata = () => {
-        const url = new URL('http://localhost:8065/api/v4/notes');
+        this.setState({
+            title: "",
+            text: ""
+        })
+        const url = '/api/v4/notes';
         fetch(url, {
             method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
-            },
+            // headers: {
+            //     Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+            // },
 
         }).then((response) => response.json())
             .then((result) => {
@@ -60,7 +63,7 @@ class PrivateNote extends PureComponent {
     }
 
     setdata = async () => {
-        const url = 'http://localhost:8065/api/v4/notes';
+        const url = '/api/v4/notes';
         let response = await fetch(url, {
             method: 'POST',
             headers: {
@@ -85,12 +88,12 @@ class PrivateNote extends PureComponent {
         this.setState({ currentItem: index })
         const id = this.state.responsedata[index].id;
 
-        const url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
+        const url = `/api/v4/notes/${id}`;
         fetch(url, {
             method: 'GET',
-            headers: {
-                Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
-            },
+            // headers: {
+                // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+            // },
 
         }).then((response) => response.json())
             .then((result) => {
@@ -101,14 +104,14 @@ class PrivateNote extends PureComponent {
 
     delete = (index) => {
         const id = this.state.responsedata[index].id;
-        let url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
+        let url = `/api/v4/notes/${id}`;
         fetch(url, {
             method: 'DELETE',
             headers: {
                 accept: '*/*',
                 'Content-Type': 'text/plain;charset=utf-8',
                 "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
-                Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+                // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
             },
         })
             .then((response) => {
@@ -122,6 +125,7 @@ class PrivateNote extends PureComponent {
             flag: false,
             currentIndexID: this.state.responsedata[index].id,
             title: this.state.responsedata[index].name,
+            text: this.state.responsedata[index].body
         })
         this.inputRef.focus();
     }
@@ -129,14 +133,14 @@ class PrivateNote extends PureComponent {
     updateNotes = (id, title) => {
         this.setState({ flag: true })
 
-        let url = new URL(`http://localhost:8065/api/v4/notes/${id}`);
+        let url = `/api/v4/notes/${id}`
         fetch(url, {
             method: 'PUT',
             headers: {
                 accept: '*/*',
                 'Content-Type': 'text/plain;charset=utf-8',
                 "X-CSRF-Token": document.cookie.split("MMCSRF=")[1],
-                Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
+                // Authorization: 'Bearer ' + '7p9kg4usgff63fq1fqu4364heh',
             },
             body: JSON.stringify({
                 name: this.state.title,
